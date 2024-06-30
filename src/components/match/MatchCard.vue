@@ -4,7 +4,7 @@
       <div class="card-content">
         <div class="match-info">
           <span class="match-time">
-            {{ formattedTime }}
+            {{ match.time }}
           </span>
           <span class="match-date">
             {{ formattedDate }}
@@ -45,7 +45,7 @@
           round
           @click="redirectToGoogleCalendar"
         >
-          Marcar no Calendário
+          Marcar no Calendário Google
         </el-button>
       </div>
     </el-card>
@@ -66,33 +66,29 @@
     },
     computed: {
       formattedDate(): string {
-        const date = new Date(this.match.date);
-        return date.toLocaleDateString('pt-BR', {
-          weekday: 'long',
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric'
-        });
+        const dateParts = this.match.date.split('-');
+        const day = dateParts[2];
+        const month = dateParts[1];
+        const year = dateParts[0];
+
+        return `${day}/${month}/${year}`;
       },
-      formattedTime(): string {
-        const [hours, minutes] = this.match.time.split(':').map(Number);
-        const date = new Date(this.match.date);
-        date.setHours(hours);
-        date.setMinutes(minutes);
-
-        const options: Intl.DateTimeFormatOptions = {
-          hour: '2-digit',
-          minute: '2-digit',
-          timeZone: 'America/Sao_Paulo'
-        };
-
-        return new Intl.DateTimeFormat('pt-BR', options).format(date);
-      }
     },
     methods: {
       redirectToGoogleCalendar() {
         const baseUrl = 'https://calendar.google.com/calendar/r/eventedit';
-        const startDateTime = new Date(`${this.match.date}T${this.match.time}-03:00`).toISOString().replace(/[-:.]/g, '');
+
+        const startDate = new Date(`${this.match.date}T${this.match.time}`);
+        const startISODateTime = startDate.toISOString();
+
+        const startDateTime = startISODateTime.substring(0, 4) +
+          startISODateTime.substring(5, 7) +
+          startISODateTime.substring(8, 10) +
+          'T' +
+          startISODateTime.substring(11, 13) +
+          startISODateTime.substring(14, 16) +
+          startISODateTime.substring(17, 19) +
+          'Z';
 
         const params = new URLSearchParams({
           text: `[${this.match.sport} ${this.match.category}] ${this.match.homeTeam} x ${this.match.awayTeam}`,
@@ -107,7 +103,6 @@
     },
   });
 </script>
-
 <style scoped lang="scss">
   .match-card {
     max-width: 320px;
