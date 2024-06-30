@@ -74,11 +74,12 @@
 
   .match-list {
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-direction: row;
+    flex-wrap: wrap;
     justify-content: center;
-    min-height: 100vh;
+    align-items: flex-start;
     padding: 20px;
+    gap: 28px;
   }
 
   .match-list > * {

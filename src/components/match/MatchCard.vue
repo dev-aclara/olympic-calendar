@@ -4,7 +4,7 @@
       <div class="card-content">
         <div class="match-info">
           <span class="match-time">
-            {{ match.time }}
+            {{ formattedTime }}
           </span>
           <span class="match-date">
             {{ formattedDate }}
@@ -45,7 +45,7 @@
           round
           @click="redirectToGoogleCalendar"
         >
-          Marcar no Calendário Google
+          Marcar no Calendário
         </el-button>
       </div>
     </el-card>
@@ -53,41 +53,59 @@
 </template>
 
 <script lang="ts">
-import { Match } from '../../interfaces/match';
-import { defineComponent, PropType } from 'vue';
+  import { Match } from '../../interfaces/match';
+  import { defineComponent, PropType } from 'vue';
 
-export default defineComponent({
-  name: 'MatchCard',
-  props: {
-    match: {
-      type: Object as PropType<Match>,
-      required: true,
+  export default defineComponent({
+    name: 'MatchCard',
+    props: {
+      match: {
+        type: Object as PropType<Match>,
+        required: true,
+      },
     },
-  },
-  computed: {
-    formattedDate(): string {
-      const date = new Date(this.match.date);
+    computed: {
+      formattedDate(): string {
+        const date = new Date(this.match.date);
+        return date.toLocaleDateString('pt-BR', {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        });
+      },
+      formattedTime(): string {
+        const [hours, minutes] = this.match.time.split(':').map(Number);
+        const date = new Date(this.match.date);
+        date.setHours(hours);
+        date.setMinutes(minutes);
 
-      return date.toLocaleDateString('pt-BR');
+        const options: Intl.DateTimeFormatOptions = {
+          hour: '2-digit',
+          minute: '2-digit',
+          timeZone: 'America/Sao_Paulo'
+        };
+
+        return new Intl.DateTimeFormat('pt-BR', options).format(date);
+      }
     },
-  },
-  methods: {
-    redirectToGoogleCalendar() {
-      const baseUrl = 'https://calendar.google.com/calendar/r/eventedit';
-      const startDateTime = new Date(`${this.match.date}T${this.match.time}`).toISOString().replace(/[-:.]/g, '');
+    methods: {
+      redirectToGoogleCalendar() {
+        const baseUrl = 'https://calendar.google.com/calendar/r/eventedit';
+        const startDateTime = new Date(`${this.match.date}T${this.match.time}-03:00`).toISOString().replace(/[-:.]/g, '');
 
-      const params = new URLSearchParams({
-        text: `[${this.match.sport} ${this.match.category}] ${this.match.homeTeam} x ${this.match.awayTeam}`,
-        dates: `${startDateTime}/${startDateTime}`,
-        details: `[${this.match.category} - ${this.match.sport}] - ${this.match.homeTeam} x ${this.match.awayTeam} (${this.match.group})`,
-        location: this.match.stadium,
-      });
+        const params = new URLSearchParams({
+          text: `[${this.match.sport} ${this.match.category}] ${this.match.homeTeam} x ${this.match.awayTeam}`,
+          dates: `${startDateTime}/${startDateTime}`,
+          details: `[${this.match.category} - ${this.match.sport}] - ${this.match.homeTeam} x ${this.match.awayTeam} (${this.match.group})`,
+          location: this.match.stadium,
+        });
 
-      const url = `${baseUrl}?${params.toString()}`;
-      window.open(url, '_blank');
+        const url = `${baseUrl}?${params.toString()}`;
+        window.open(url, '_blank');
+      },
     },
-  },
-});
+  });
 </script>
 
 <style scoped lang="scss">
