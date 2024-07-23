@@ -1,4 +1,4 @@
-export interface Match {
+export interface IFootball {
   id: number;
   category: string;
   group: string;

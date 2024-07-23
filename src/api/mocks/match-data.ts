@@ -1,6 +1,6 @@
-import { Match } from "../../interfaces/match";
+import { IFootball } from "../../interfaces/football";
 
-export const matchData: Match[] = [
+export const matchData: IFootball[] = [
   {
     id: 1,
     category: "Masculino",

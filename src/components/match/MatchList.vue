@@ -10,43 +10,66 @@
     >
       <template #default>
         <div class="match-list">
-          <MatchCard v-for="match in footballMatches" :key="match.id" :match="match" />
+          <FootballCard v-for="match in footballMatches" :key="match.id" :match="match" />
         </div>
       </template>
     </el-tab-pane>
+
     <el-tab-pane
       label="Vôlei"
       name="volleyball"
     >
       <template #default>
         <div class="match-list">
-          <span>
-            Em breve, traremos os detalhes dos jogos de vôlei. Estamos preparando tudo para trazer as informações mais recentes sobre as partidas. Fique de olho!
-          </span>
+          <VolleyCard v-for="match in volleyballMatches" :key="match.id" :match="match" />
         </div>
       </template>
     </el-tab-pane>
+
+    <el-tab-pane
+      label="Skate"
+      name="skate"
+    >
+      <template #default>
+        <div class="match-list">
+          <SkateCard v-for="match in skateMatches" :key="match.id" :match="match" />
+        </div>
+      </template>
+    </el-tab-pane>
+
   </el-tabs>
 </template>
 
 <script lang="ts">
-  import MatchCard from './MatchCard.vue';
-  import { Match } from '../../interfaces/match';
+  import FootballCard from './football/FootballCard.vue';
+  import VolleyCard from './volleyball/VolleyCard.vue';
+  import SkateCard from './skate/SkateCard.vue';
+  import { IFootball } from '../../interfaces/football';
+  import { IVolley } from '../../interfaces/volley';
+  import { ISkate } from '../../interfaces/skate';
   import { defineComponent, ref, onMounted } from 'vue';
   import { matchData } from '../../api/mocks/match-data';
+  import { volleyData } from '../../api/mocks/volley-data';
+  import { skateData } from '../../api/mocks/skate-data';
 
   export default defineComponent({
     name: 'TabsWithMatchList',
     components: {
-      MatchCard,
+      FootballCard,
+      VolleyCard,
+      SkateCard,
     },
     setup() {
-      const footballMatches = ref<Match[]>([]);
+      const footballMatches = ref<IFootball[]>([]);
+      const volleyballMatches = ref<IVolley[]>([]);
+      const skateMatches = ref<ISkate[]>([]);
       const activeName = ref('football');
 
       onMounted(() => {
         setTimeout(() => {
           footballMatches.value = matchData.filter(match => match.sport === 'Futebol');
+          volleyballMatches.value = volleyData.filter(match => match.sport === 'Vôlei');
+          skateMatches.value = skateData.filter(match => match.sport === 'Skate');
         }, 1000);
       });
 
@@ -58,6 +81,8 @@
       return {
         activeName,
         footballMatches,
+        volleyballMatches,
+        skateMatches,
         handleClick,
       };
     },
