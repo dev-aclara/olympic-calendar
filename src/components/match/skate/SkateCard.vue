@@ -17,6 +17,7 @@
           class="mark-button"
           type="primary"
           round
+          :disabled="isPastEvent"
           @click="redirectToGoogleCalendar"
         >
           Marcar no Calendário Google
@@ -46,6 +47,11 @@
         const year = dateParts[0];
 
         return `${day}/${month}/${year}`;
+      },
+      isPastEvent(): boolean {
+        const eventDateTime = new Date(`${this.match.date}T${this.match.time}`);
+        const now = new Date();
+        return eventDateTime < now;
       },
     },
     methods: {

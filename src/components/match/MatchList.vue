@@ -37,6 +37,17 @@
       </template>
     </el-tab-pane>
 
+    <el-tab-pane
+      label="Ginástica Artística"
+      name="artistic-gymnastics"
+    >
+      <template #default>
+        <div class="match-list">
+          <ArtisticGymnasticsCard v-for="match in artisticGymnasticMatches" :key="match.id" :match="match" />
+        </div>
+      </template>
+    </el-tab-pane>
+
   </el-tabs>
 </template>
 
@@ -44,6 +55,7 @@
   import FootballCard from './football/FootballCard.vue';
   import VolleyCard from './volleyball/VolleyCard.vue';
   import SkateCard from './skate/SkateCard.vue';
+  import ArtisticGymnasticsCard from './artistic-gymnastics/ArtisticGymnasticsCard.vue';
   import { IFootball } from '../../interfaces/football';
   import { IVolley } from '../../interfaces/volley';
   import { ISkate } from '../../interfaces/skate';
@@ -51,6 +63,7 @@
   import { matchData } from '../../api/mocks/match-data';
   import { volleyData } from '../../api/mocks/volley-data';
   import { skateData } from '../../api/mocks/skate-data';
+  import { artisticGymnasticsData } from '../../api/mocks/artistic-gymnastics-data';
 
   export default defineComponent({
     name: 'TabsWithMatchList',
@@ -58,11 +71,13 @@
       FootballCard,
       VolleyCard,
       SkateCard,
+      ArtisticGymnasticsCard,
     },
     setup() {
       const footballMatches = ref<IFootball[]>([]);
       const volleyballMatches = ref<IVolley[]>([]);
       const skateMatches = ref<ISkate[]>([]);
+      const artisticGymnasticMatches = ref<IArtisticGymnastics[]>([]);
       const activeName = ref('football');
 
       onMounted(() => {
@@ -70,6 +85,7 @@
           footballMatches.value = matchData.filter(match => match.sport === 'Futebol');
           volleyballMatches.value = volleyData.filter(match => match.sport === 'Vôlei');
           skateMatches.value = skateData.filter(match => match.sport === 'Skate');
+          artisticGymnasticMatches.value = artisticGymnasticsData.filter(match => match.sport === 'Ginástica Artística');
         }, 1000);
       });
 
@@ -83,6 +99,7 @@
         footballMatches,
         volleyballMatches,
         skateMatches,
+        artisticGymnasticMatches,
         handleClick,
       };
     },

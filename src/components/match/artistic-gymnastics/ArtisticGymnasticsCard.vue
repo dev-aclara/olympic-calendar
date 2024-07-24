@@ -12,32 +12,6 @@
           <span class="match-date">
             {{ formattedDate }}
           </span>
-          <span class="match-stadium">
-            {{ match.stadium }}
-          </span>
-        </div>
-        <div class="teams">
-          <div class="team">
-            <span class="team-name">
-              {{ match.homeTeam }}
-            </span>
-            <img
-              :src="match.homeFlag"
-              alt="home team flag"
-              class="team-flag"
-            />
-          </div>
-          <div class="versus">x</div>
-          <div class="team">
-            <img
-              :src="match.awayFlag"
-              alt="away team flag"
-              class="team-flag"
-            />
-            <span class="team-name">
-              {{ match.awayTeam }}
-            </span>
-          </div>
         </div>
         <el-button
           class="mark-button"
@@ -54,14 +28,14 @@
 </template>
 
 <script lang="ts">
-  import { IFootball } from '../../../interfaces/football';
+  import { IArtisticGymnastics } from '../../../interfaces/artistic-gymnastics' ;
   import { defineComponent, PropType } from 'vue';
 
   export default defineComponent({
     name: 'MatchCard',
     props: {
       match: {
-        type: Object as PropType<IFootball>,
+        type: Object as PropType<ISkate>,
         required: true,
       },
     },
@@ -97,10 +71,9 @@
           'Z';
 
         const params = new URLSearchParams({
-          text: `[${this.match.sport} ${this.match.category}] ${this.match.homeTeam} x ${this.match.awayTeam}`,
+          text: `[${this.match.sport} ${this.match.category}]`,
           dates: `${startDateTime}/${startDateTime}`,
-          details: `[${this.match.category} - ${this.match.sport}] - ${this.match.homeTeam} x ${this.match.awayTeam} (${this.match.group})`,
-          location: this.match.stadium,
+          details: `[${this.match.category} - ${this.match.sport}]`,
         });
 
         const url = `${baseUrl}?${params.toString()}`;
@@ -138,9 +111,10 @@
 
     .match-date,
     .match-category,
-    .match-stadium,
     .match-time {
       margin: 2px 0;
+      text-align: center;
+      width: 100%;
     }
 
     .match-time {
@@ -149,31 +123,6 @@
       margin-bottom: 16px;
     }
   }
-
-  .teams {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-  }
-
-  .team {
-    display: flex;
-    align-items: center;
-    margin: 0 10px;
-
-    .team-flag {
-      width: 38px;
-      height: 26px;
-      margin: 0 10px;
-    }
-  }
-
-  .versus {
-    font-size: 20px;
-    font-weight: bolder;
-  }
-
   .mark-button {
     margin-top: 16px;
   }
