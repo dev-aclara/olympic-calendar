@@ -59,6 +59,7 @@
   import { IFootball } from '../../interfaces/football';
   import { IVolley } from '../../interfaces/volley';
   import { ISkate } from '../../interfaces/skate';
+  import { IArtisticGymnastics } from '../../interfaces/artistic-gymnastics';
   import { defineComponent, ref, onMounted } from 'vue';
   import { matchData } from '../../api/mocks/match-data';
   import { volleyData } from '../../api/mocks/volley-data';

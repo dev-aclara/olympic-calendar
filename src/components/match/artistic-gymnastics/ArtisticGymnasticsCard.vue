@@ -35,7 +35,7 @@
     name: 'MatchCard',
     props: {
       match: {
-        type: Object as PropType<ISkate>,
+        type: Object as PropType<IArtisticGymnastics>,
         required: true,
       },
     },
